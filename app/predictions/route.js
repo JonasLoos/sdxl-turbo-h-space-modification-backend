@@ -13,7 +13,7 @@ export async function GET(request) {
         const model_versions = await replicate.models.versions.list(model_owner, model_name);
         model_version = model_versions.results[0].id;
     }
-    const output = await replicate.run(`${model_owner}/${model_name}:${model_version}`, {input: req.body});
+    const output = await replicate.run(`${model_owner}/${model_name}:${model_version}`, {input: request.body});
     return new Response(output, {
         headers: {
             'content-type': 'application/json',
