@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react';
+import './style.css';
 
 
 export default function Home() {
@@ -20,7 +21,7 @@ export default function Home() {
   const callApi = () => {
     console.log('Calling API with:', { prompt, value1, value2, value3 });
     fetch('./predictions', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -40,35 +41,55 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <h1>SDXL Turbo H Space Modification</h1>
-      <img src={resultURL} height={512} width={512} />
-      <input
-        type="text"
-        value={prompt}
-        onChange={handleInputChange(setPrompt)}
-      />
-      <input
-        type="range"
-        min="-5"
-        max="5"
-        value={value1}
-        onChange={handleInputChange(setValue1)}
-      />
-      <input
-        type="range"
-        min="-5"
-        max="5"
-        value={value2}
-        onChange={handleInputChange(setValue2)}
-      />
-      <input
-        type="range"
-        min="-5"
-        max="5"
-        value={value3}
-        onChange={handleInputChange(setValue3)}
-      />
+    <div className="container">
+      <h1 className="title">SDXL Turbo H Space Modification</h1>
+      <div className="image-container">
+        <img src={resultURL} alt="Result" className="result-image" />
+      </div>
+      <div className="input-container">
+        <input
+          type="text"
+          value={prompt}
+          onChange={handleInputChange(setPrompt)}
+          className="text-input"
+          placeholder="Enter your prompt"
+        />
+      </div>
+      <div className="sliders">
+        <div className="slider">
+          <label htmlFor="value1">Value 1: </label>
+          <input
+            id="value1"
+            type="range"
+            min="-5"
+            max="5"
+            value={value1}
+            onChange={handleInputChange(setValue1)}
+          />
+        </div>
+        <div className="slider">
+          <label htmlFor="value2">Value 2: </label>
+          <input
+            id="value2"
+            type="range"
+            min="-5"
+            max="5"
+            value={value2}
+            onChange={handleInputChange(setValue2)}
+          />
+        </div>
+        <div className="slider">
+          <label htmlFor="value3">Value 3: </label>
+          <input
+            id="value3"
+            type="range"
+            min="-5"
+            max="5"
+            value={value3}
+            onChange={handleInputChange(setValue3)}
+          />
+        </div>
+      </div>
     </div>
   );
 }

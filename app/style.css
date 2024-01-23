@@ -1,0 +1,43 @@
+.container {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .title {
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .image-container {
+    margin: 20px 0;
+  }
+  
+  .result-image {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .input-container, .sliders {
+    margin-bottom: 15px;
+  }
+  
+  .text-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+  }
+  
+  .slider {
+    margin: 10px 0;
+  }
+  
+  .slider input[type=range] {
+    width: 100%;
+  }
+  
