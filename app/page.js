@@ -11,6 +11,7 @@ export default function Home() {
   const [seed, setSeed] = useState(42);
   const [timer, setTimer] = useState(null);
   const [resultURL, setResultURL] = useState('');
+  const [activeRequests, setActiveRequests] = useState(0);
 
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
@@ -19,6 +20,7 @@ export default function Home() {
   };
 
   const callApi = () => {
+    setActiveRequests(prev => prev + 1);
     console.log('Calling API with:', { prompt, value1, value2, value3 });
     fetch('./predictions', {
       method: 'POST',
@@ -40,15 +42,22 @@ export default function Home() {
         } else {
           console.error('Error (from API):', data.error);
         }
+        setActiveRequests(prev => prev - 1);
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        console.error('Error:', error);
+        setActiveRequests(prev => prev - 1);
+      });
   };
 
   return (
     <div className="container">
       <h1 className="title">SDXL Turbo H Space Modification</h1>
       <div className="image-container">
-        <img src={resultURL} alt="Result" className="result-image" height={512} width={512} />
+        <img src={resultURL} alt="Result" className="result-image" />
+        {activeRequests > 0 && (
+          <div className="loading-animation">Loading...</div>
+        )}
       </div>
       <div className="input-container">
         <label htmlFor="prompt">Prompt: </label>
