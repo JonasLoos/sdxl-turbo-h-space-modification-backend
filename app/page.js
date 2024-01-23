@@ -20,7 +20,7 @@ export default function Home() {
   const callApi = () => {
     console.log('Calling API with:', { prompt, value1, value2, value3 });
     fetch('./predictions', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
