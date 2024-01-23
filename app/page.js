@@ -34,8 +34,12 @@ export default function Home() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Success:', data);
-        setResultURL(data.result);
+        if (data.success) {
+          console.log('Success:', data);
+          setResultURL(data.result);
+        } else {
+          console.error('Error (from API):', data.error);
+        }
       })
       .catch(error => console.error('Error:', error));
   };
@@ -44,7 +48,7 @@ export default function Home() {
     <div className="container">
       <h1 className="title">SDXL Turbo H Space Modification</h1>
       <div className="image-container">
-        <img src={resultURL} alt="Result" className="result-image" />
+        <img src={resultURL} alt="Result" className="result-image" height={512} width={512} />
       </div>
       <div className="input-container">
         <label htmlFor="prompt">Prompt: </label>

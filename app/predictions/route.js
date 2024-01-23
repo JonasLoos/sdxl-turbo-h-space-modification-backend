@@ -18,14 +18,14 @@ export async function POST(request) {
         console.log('Calling API with:', inputData);
         const output = await replicate.run(`${model_owner}/${model_name}:${model_version}`, {input: inputData});
         console.log('Success:', output);
-        return new Response(JSON.stringify(output), {
+        return new Response(JSON.stringify({success: true, result: output}), {
             headers: {
                 'content-type': 'application/json',
             },
         })
     } catch (e) {
         console.error(e);
-        return new Response(e, {
+        return new Response({success: false, error: e}, {
             headers: {
                 'content-type': 'application/json',
             },
