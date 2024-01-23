@@ -47,7 +47,9 @@ export default function Home() {
         <img src={resultURL} alt="Result" className="result-image" />
       </div>
       <div className="input-container">
+        <label htmlFor="prompt">Prompt: </label>
         <input
+          id="prompt"
           type="text"
           value={prompt}
           onChange={handleInputChange(setPrompt)}
@@ -57,7 +59,7 @@ export default function Home() {
       </div>
       <div className="sliders">
         <div className="slider">
-          <label htmlFor="value1">Value 1: </label>
+          <label htmlFor="value1">Smiling: </label>
           <input
             id="value1"
             type="range"
@@ -68,7 +70,7 @@ export default function Home() {
           />
         </div>
         <div className="slider">
-          <label htmlFor="value2">Value 2: </label>
+          <label htmlFor="value2">Old: </label>
           <input
             id="value2"
             type="range"
@@ -79,7 +81,7 @@ export default function Home() {
           />
         </div>
         <div className="slider">
-          <label htmlFor="value3">Value 3: </label>
+          <label htmlFor="value3">Cyberpunk: </label>
           <input
             id="value3"
             type="range"
