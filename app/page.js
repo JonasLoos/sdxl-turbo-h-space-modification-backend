@@ -1,4 +1,4 @@
-// use client
+'use client'
 import { useState } from 'react';
 
 
@@ -18,7 +18,6 @@ export default function Home() {
   };
 
   const callApi = () => {
-    // Call your API here
     console.log('Calling API with:', { prompt, value1, value2, value3 });
     fetch('./predictions', {
       method: 'POST',
