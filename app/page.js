@@ -24,8 +24,6 @@ export default function Home() {
     seed: seed
   }).toString();
 
-  console.log('cache', cache);
-
   const callApi = (queryParams) => {
     setActiveRequests(prev => prev + 1);
     console.log('Calling API with ', queryParams);
