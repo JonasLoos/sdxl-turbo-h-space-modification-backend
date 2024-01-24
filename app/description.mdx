@@ -7,7 +7,7 @@ The *base prompt* and *prompt continuation* from above are combined and then sen
 The semantic latent space, or $h$-space, of the model, which is in the bottom of the unet, is then adjusted during the image generation process.
 For this adjustment, a precomputed direction is scaled by the given scales from above and added. The direction is computed by running the model multiple times with a base prompt and an adjusted prompt and then taking the average $h$-space difference between the two.
 
-As you can see above, the directions are far from perfect and don't work for every image. When generating the directions this way, often correlating attributes are mixed in. For example, the prompt "a portrait of a *smiling* person" will usually zoom in more on the face, so the *smiling* direction might also contain a *zoom in* component.
+As you can see above, the directions are far from perfect and don't work for every image. When generating the directions this way, often correlating attributes are mixed in. For example, the prompt "a portrait of a *smiling* person" will usually zoom in more on the face, so the *smiling* direction might also contain a *zoom in* component. Actually, for the example of the *smiling* direction above, the zoom in seems to be dominant, while a change in how much the person is smiling is not really visible.
 
 Here is a simplified excerpt from the [model repo](https://github.com/JonasLoos/sdxl-turbo-h-space-modification-model):
 
