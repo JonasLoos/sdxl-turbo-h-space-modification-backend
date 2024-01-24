@@ -3,7 +3,9 @@
 
 ## How this works
 
-The prompt is formed by the *base prompt* and *prompt continuation* from above and then send to a [SDXL-Turbo](https://huggingface.co/stabilityai/sdxl-turbo) model. The $h$-space of the model, which is in the bottom of the unet, is then adjusted during the image generation process. For this adjustment, a precomputed direction is scaled by the given scales from above and added. The direction is computed by running the model multiple times with a base prompt and an adjusted prompt and then taking the average $h$-space difference between the two.
+The *base prompt* and *prompt continuation* from above are combined and then send to a [SDXL-Turbo](https://huggingface.co/stabilityai/sdxl-turbo) diffusion model, which creates a corresponding image.
+The $h$-space of the model, which is in the bottom of the unet, is then adjusted during the image generation process.
+For this adjustment, a precomputed direction is scaled by the given scales from above and added. The direction is computed by running the model multiple times with a base prompt and an adjusted prompt and then taking the average $h$-space difference between the two.
 
 Here is a simplified excerpt from the [model repo](https://github.com/JonasLoos/sdxl-turbo-h-space-modification-model):
 
