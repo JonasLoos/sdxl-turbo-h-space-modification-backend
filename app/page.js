@@ -31,6 +31,7 @@ export default function Home() {
         if (data.success) {
           console.log('Success:', data);
           setResultURL(data.result);
+          cache[queryParams] = data.result;
         } else {
           console.error('Error (from API):', data.error);
         }
