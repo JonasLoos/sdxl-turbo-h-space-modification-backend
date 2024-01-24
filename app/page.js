@@ -7,7 +7,7 @@ import Description from './description.mdx';
 
 export default function Home() {
   const num_attr = attributes.map((attribute) => attribute['attributes'].length).reduce((a, b) => a + b, 0);
-  const [prompt, setPrompt] = useState('');
+  const [extraPrompt, setExtraPrompt] = useState('');
   const [basePrompt, setBasePrompt] = useState(0);
   const [scales, setScales] = useState(Array(num_attr).fill(0));
   const [seed, setSeed] = useState(42);
@@ -23,6 +23,7 @@ export default function Home() {
 
   const callApi = () => {
     setActiveRequests(prev => prev + 1);
+    const prompt = attributes[basePrompt]['base_prompt'] + ', ' + extraPrompt;
     console.log('Calling API with:', { prompt, scales, seed });
     const queryParams = new URLSearchParams({
       prompt: prompt,
@@ -74,8 +75,8 @@ export default function Home() {
           <input
             id="extra-prompt"
             type="text"
-            value={prompt}
-            onChange={handleInputChange(setPrompt)}
+            value={extraPrompt}
+            onChange={handleInputChange(setExtraPrompt)}
             className="text-input"
             placeholder="e.g. cyberpunk style"
           />
