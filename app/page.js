@@ -12,7 +12,6 @@ export default function Home() {
   const [scales, setScales] = useState(Array(num_attr).fill(0));
   const [seed, setSeed] = useState(42);
   const [timer, setTimer] = useState(null);
-  const [resultURL, setResultURL] = useState('');
   const [activeRequests, setActiveRequests] = useState(0);
   const [cache, setCache] = useState({});
   const prompt = basePrompt < attributes.length ? attributes[basePrompt]['base_prompt'] + ' ' + extraPrompt : extraPrompt;
@@ -22,9 +21,6 @@ export default function Home() {
     diffusion_steps: 1,
     seed: seed
   }).toString();
-  if (queryParams in cache && cache[queryParams] != resultURL) {
-    setResultURL(cache[queryParams]);
-  }
 
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
@@ -62,7 +58,7 @@ export default function Home() {
     <div className="container">
       <h1 className="title">SDXL Turbo H Space Modification</h1>
       <div className="image-container">
-        <img src={resultURL} className="result-image" />
+        <img src={cache[queryParams]} className="result-image" />
         {activeRequests > 0 && (
           <div className="loading-overlay"><div className='lds-dual-ring'></div></div>
         )}
