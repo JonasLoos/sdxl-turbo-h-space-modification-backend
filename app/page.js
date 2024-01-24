@@ -5,9 +5,6 @@ import attributes from './attributes.json';
 import Description from './description.mdx';
 
 
-const cache = {};
-
-
 export default function Home() {
   const num_attr = attributes.map((attribute) => attribute['attributes'].length).reduce((a, b) => a + b, 0);
   const [extraPrompt, setExtraPrompt] = useState('');
@@ -17,6 +14,17 @@ export default function Home() {
   const [timer, setTimer] = useState(null);
   const [resultURL, setResultURL] = useState('');
   const [activeRequests, setActiveRequests] = useState(0);
+  const [cache, setCache] = useState({});
+  const prompt = basePrompt < attributes.length ? attributes[basePrompt]['base_prompt'] + ' ' + extraPrompt : extraPrompt;
+  const queryParams = new URLSearchParams({
+    prompt: prompt,
+    scales: scales.join(','),
+    diffusion_steps: 1,
+    seed: seed
+  }).toString();
+  if (queryParams in cache && cache[queryParams] != resultURL) {
+    setResultURL(cache[queryParams]);
+  }
 
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
@@ -30,10 +38,10 @@ export default function Home() {
       .then(data => {
         if (data.success) {
           console.log('Success:', data);
-          setResultURL(data.result);
-          cache[queryParams] = data.result;
+          setCache(prev => ({...prev, queryParams: data.result}));
         } else {
           console.error('Error (from API):', data.error);
+          // TODO: maybe display toast with error message
         }
         setActiveRequests(prev => prev - 1);
       })
@@ -45,17 +53,7 @@ export default function Home() {
 
   useEffect(() => {
     if (timer) clearTimeout(timer);
-    const prompt = basePrompt < attributes.length ? attributes[basePrompt]['base_prompt'] + ' ' + extraPrompt : extraPrompt;
-    const queryParams = new URLSearchParams({
-      prompt: prompt,
-      scales: scales.join(','),
-      diffusion_steps: 1,
-      seed: seed
-    }).toString();
-    if (queryParams in cache) {
-      console.log('Found in cache:', queryParams);
-      setResultURL(cache[queryParams]);
-    } else {
+    if (!(queryParams in cache)) {
       setTimer(setTimeout(callApi, 500, queryParams));
     }
   }, [basePrompt, extraPrompt, scales, seed]);
@@ -115,7 +113,6 @@ export default function Home() {
             i++;
           }
         }
-        console.log(scales);
         return sliders;
       })()}</div>
       <div id="description">
