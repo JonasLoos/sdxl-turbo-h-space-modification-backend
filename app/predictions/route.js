@@ -24,7 +24,7 @@ export async function GET({ inputData }) {
         })
     } catch (e) {
         console.error(e);
-        return new Response({success: false, error: e}, {
+        return new Response(JSON.stringify({success: false, error: e}), {
             headers: {
                 'content-type': 'application/json',
             },
