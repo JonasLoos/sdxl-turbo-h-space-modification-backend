@@ -27,6 +27,9 @@ export async function GET(request) {
         return new Response(JSON.stringify({success: true, result: output}), {
             headers: {
                 'content-type': 'application/json',
+                'Cache-Control': 'public, s-maxage=1',
+                'CDN-Cache-Control': 'public, s-maxage=60',
+                'Vercel-CDN-Cache-Control': 'public, s-maxage=3600',
             },
         })
     } catch (e) {
