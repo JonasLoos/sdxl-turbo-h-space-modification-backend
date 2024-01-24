@@ -116,6 +116,10 @@ body {
     width: 100%;
 }
 
+.nodisplay {
+    display: none;
+}
+
 #description {
     text-align: left;
 }

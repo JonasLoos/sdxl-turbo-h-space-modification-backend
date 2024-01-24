@@ -4,9 +4,11 @@ import './style.css';
 import attributes from './attributes.json';
 import Description from './description.mdx';
 
+const attributes_list = attributes.map(({base_prompt, attributes}) => attributes.map(({attribute, prompt}) => ({base_prompt, attribute, prompt}))).flat();
+const num_attr = attributes_list.length;
+
 
 export default function Home() {
-  const num_attr = attributes.map((attribute) => attribute['attributes'].length).reduce((a, b) => a + b, 0);
   const [extraPrompt, setExtraPrompt] = useState('');
   const [basePrompt, setBasePrompt] = useState(0);
   const [scales, setScales] = useState(Array(num_attr).fill(0));
@@ -85,32 +87,21 @@ export default function Home() {
           />
         </div>
       </div>
-      <div className='sliders'>{(() => {
-        const sliders = [];
-        let i = 0;
-        for (let j = 0; j < attributes.length; j++) {
-          const { base_prompt, attributes: inner_attributes } = attributes[j];
-          for (const { attribute, prompt } of inner_attributes) {
-            if (basePrompt == attributes.length || basePrompt == j) {
-              sliders.push(
-                <div className="slider" key={i} title={prompt}>
-                  <label htmlFor={`value-${attribute}`}>{(basePrompt == attributes.length ? base_prompt + ' - ' : '') + attribute}</label>
-                  <input
-                    id={`value-${attribute}`}
-                    type="range"
-                    min="-8"
-                    max="8"
-                    value={scales[i]}
-                    onChange={((i) => handleInputChange((x) => {setScales(prev => {const tmp = [...prev]; tmp[i] = parseInt(x); return tmp})}))(i)}
-                  />
-                </div>
-              );
-            }
-            i++;
-          }
-        }
-        return sliders;
-      })()}</div>
+      <div className='sliders'>{
+        attributes_list.map(({base_prompt, attribute, prompt}, i) => (
+          <div className={`slider ${(basePrompt < attributes.length && base_prompt != attributes[basePrompt].base_prompt) ? 'nodisplay' : ''}`} key={`value-${i}`} title={prompt}>
+            <label htmlFor={`value-${i}`}>{(basePrompt == attributes.length ? base_prompt + ' - ' : '') + attribute}</label>
+            <input
+              id={`value-${i}`}
+              type="range"
+              min="-8"
+              max="8"
+              value={scales[i]}
+              onChange={handleInputChange((x) => {setScales(prev => {const tmp = [...prev]; tmp[i] = parseInt(x); return tmp})})}
+            />
+          </div>
+        ))
+      }</div>
       <div id="description">
         <Description/>
       </div>
