@@ -74,6 +74,13 @@ body {
     }
 }
 
+.loading-cache-empty {
+    position: absolute;
+    width: 100%;
+    top: 45%;
+    left: 0;
+}
+
 .prompt-container {
     display: flex;
     justify-content: space-between;

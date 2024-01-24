@@ -26,7 +26,7 @@ direction = get_representation("a portrait of a smiling person") - get_represent
 The $h$-space has a dimensionality of $(1,1280,16,16)$ for SDXL-Turbo. The last two dimensions are spatial, so even at the very bottom of the diffusion unet, we still have $16\times16$ blocks. This also impacts the visualization above, as the $h$-space modification is unique for each block. This can cause problems if some parts of e.g. a human face are at a different position in the generated image compared to the precalculated direction.
 
 If you want to know more about $h$-space modification in diffusion models, here are some papers:
-* [Discovering Interpretable Directions in the Semantic Latent Space of Diffusion Models](https://arxiv.org/abs/2303.11073v1) by René Haas et al. [^1] [^2]
+* [Discovering Interpretable Directions in the Semantic Latent Space of Diffusion Models](https://arxiv.org/abs/2303.11073v1) by René Haas et al. [^paper-impl] [^paper-similar]
 * [Diffusion Models already have a Semantic Latent Space](https://arxiv.org/abs/2210.10960v2) by Mingi Kwon et al.
 
 ---
@@ -34,5 +34,5 @@ If you want to know more about $h$-space modification in diffusion models, here 
 You can check out the source code for this Project on Github for [Model](https://github.com/JonasLoos/sdxl-turbo-h-space-modification-model) and [Webapp](https://github.com/JonasLoos/sdxl-turbo-h-space-modification-backend). Furthermore, this project uses [replicate](https://replicate.com/) for running the wrapped [SDXL-Turbo](https://huggingface.co/stabilityai/sdxl-turbo) model, and [Vercel](https://vercel.com/) for webapp deployment.
 
 
-[^1]: A partial implementation can be found [here](https://github.com/JonasLoos/h-space-directions).
-[^2]: This project is very similar to the method described in section 5.
+[^paper-impl]: A partial implementation can be found [here](https://github.com/JonasLoos/h-space-directions).
+[^paper-similar]: This project is very similar to the method described in section 5.

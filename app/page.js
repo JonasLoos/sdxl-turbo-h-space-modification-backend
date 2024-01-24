@@ -45,6 +45,7 @@ export default function Home() {
       });
   };
 
+  // create api request, if the parameters changed and the result is not cached
   useEffect(() => {
     if (timer) clearTimeout(timer);
     if (!(queryParams in cache)) {
@@ -52,14 +53,26 @@ export default function Home() {
     }
   }, [queryParams]);
 
+  // create a delayed first api request, to handle the time replicate might need to start
+  useEffect(() => {
+    // only call the api if there is no cached result yet
+    const tmp_fn = (x) => {if (Object.keys(cache).length == 0) callApi(x);}
+    setTimer(setTimeout(tmp_fn, 60*1000, queryParams));
+    setTimer(setTimeout(tmp_fn, 120*1000, queryParams));
+    setTimer(setTimeout(tmp_fn, 180*1000, queryParams));
+  }, []);
+
   return (
     <div className="container">
       <h1 className="title">SDXL Turbo H Space Modification</h1>
       <div className="image-container">
         <img src={cache[queryParams] || ''} className="result-image" />
-        {activeRequests > 0 && (
+        {activeRequests > 0 ? (
           <div className="loading-overlay"><div className='lds-dual-ring'></div></div>
-        )}
+        ) : null}
+        {Object.keys(cache).length == 0 ? (
+          <div className="loading-cache-empty">The first request might take over a minute if the replicate model is starting.</div>
+        ) : null}
       </div>
       <div className="prompt-container">
         <div>
