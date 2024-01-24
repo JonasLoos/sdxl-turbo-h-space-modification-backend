@@ -8,8 +8,9 @@ const model_name = 'sdxl-turbo-h-space-modification-model'
 let model_version = null;
 
 
-export async function GET({ inputData }) {
+export async function GET(request) {
     try {
+        const { inputData } = new URLSearchParams(request.url)
         if (model_version === null) {
             const model_versions = await replicate.models.versions.list(model_owner, model_name);
             model_version = model_versions.results[0].id;
