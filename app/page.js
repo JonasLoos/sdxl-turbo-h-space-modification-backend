@@ -18,7 +18,7 @@ export default function Home() {
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
     if (timer) clearTimeout(timer);
-    setTimer(setTimeout(callApi, 300));
+    setTimer(setTimeout(callApi, 500));
   };
 
   const callApi = () => {
@@ -78,7 +78,7 @@ export default function Home() {
             value={extraPrompt}
             onChange={handleInputChange(setExtraPrompt)}
             className="text-input"
-            placeholder="e.g. cyberpunk style"
+            placeholder="e.g. photo, colorful"
           />
         </div>
       </div>
