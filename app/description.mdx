@@ -7,12 +7,14 @@ The *base prompt* and *prompt continuation* from above are combined and then sen
 The $h$-space of the model, which is in the bottom of the unet, is then adjusted during the image generation process.
 For this adjustment, a precomputed direction is scaled by the given scales from above and added. The direction is computed by running the model multiple times with a base prompt and an adjusted prompt and then taking the average $h$-space difference between the two.
 
+As you can see above, the directions are far from perfect and don't work for every image. When generating the directions this way, often correlating attributes are mixed in. For example, the prompt "a portrait of a *smiling* person" will usually zoom in more on the face, so the *smiling* direction might also contain a *zoom in* component.
+
 Here is a simplified excerpt from the [model repo](https://github.com/JonasLoos/sdxl-turbo-h-space-modification-model):
 
 ```python
 pipe = AutoPipelineForText2Image.from_pretrained('stabilityai/sdxl-turbo', torch_dtype=torch.float16, variant="fp16").to('cuda')
 
-def get_representation(text, count=50):
+def get_representation(text, count=200):
     reprs = []
     def get_repr(module, input, output): reprs.append(output.detach())
     for i in range(count):
