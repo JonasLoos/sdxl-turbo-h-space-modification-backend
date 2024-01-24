@@ -11,13 +11,13 @@ let model_version = null;
 export async function GET(request) {
     try {
         console.log('GET request:', request.url)
-        const { inputData } = new URLSearchParams(request.url)
+        const { searchParams } = new URLSearchParams(request.url)
         if (model_version === null) {
             const model_versions = await replicate.models.versions.list(model_owner, model_name);
             model_version = model_versions.results[0].id;
         }
-        console.log('Calling API with:', inputData);
-        const output = await replicate.run(`${model_owner}/${model_name}:${model_version}`, {input: inputData});
+        console.log('Calling API with:', searchParams);
+        const output = await replicate.run(`${model_owner}/${model_name}:${model_version}`, {input: searchParams});
         console.log('Success:', output);
         return new Response(JSON.stringify({success: true, result: output}), {
             headers: {
