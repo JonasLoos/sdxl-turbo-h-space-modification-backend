@@ -11,7 +11,7 @@ let model_version = null;
 export async function GET(request) {
     try {
         console.log('GET request:', request.url)
-        const { searchParams } = new URLSearchParams(request.url)
+        const { searchParams } = new URL(request.url)
         if (model_version === null) {
             const model_versions = await replicate.models.versions.list(model_owner, model_name);
             model_version = model_versions.results[0].id;
