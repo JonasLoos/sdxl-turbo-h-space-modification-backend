@@ -98,7 +98,7 @@ export default function Home() {
       </div>
       <div className='sliders'>{
         attributes_list.map(({base_prompt, attribute, prompt}, i) => (
-          <div className={`slider ${(basePrompt < attributes.length && base_prompt != attributes[basePrompt].base_prompt) ? 'nodisplay' : ''}`} key={`value-${i}`} title={prompt}>
+          <div className={`slider ${(basePrompt < attributes.length && base_prompt != attributes[basePrompt].base_prompt) ? 'nodisplay' : ''}`} key={`value-${i}`} title={`"${prompt}" - "${base_prompt}"`}>
             <label htmlFor={`value-${i}`}>{(basePrompt == attributes.length ? base_prompt + ' - ' : '') + attribute}</label>
             <input
               id={`value-${i}`}
