@@ -24,6 +24,8 @@ export default function Home() {
     seed: seed
   }).toString();
 
+  console.log('cache', cache);
+
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
   };
