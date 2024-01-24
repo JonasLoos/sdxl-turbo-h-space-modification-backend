@@ -5,6 +5,9 @@ import attributes from './attributes.json';
 import Description from './description.mdx';
 
 
+const cache = {};
+
+
 export default function Home() {
   const num_attr = attributes.map((attribute) => attribute['attributes'].length).reduce((a, b) => a + b, 0);
   const [extraPrompt, setExtraPrompt] = useState('');
@@ -19,16 +22,9 @@ export default function Home() {
     setter(e.target.value);
   };
 
-  const callApi = () => {
+  const callApi = (queryParams) => {
     setActiveRequests(prev => prev + 1);
-    const prompt = basePrompt < attributes.length ? attributes[basePrompt]['base_prompt'] + ' ' + extraPrompt : extraPrompt;
-    console.log('Calling API with:', { prompt, scales, seed });
-    const queryParams = new URLSearchParams({
-      prompt: prompt,
-      scales: scales.join(','),
-      diffusion_steps: 1,
-      seed: seed
-    }).toString();
+    console.log('Calling API with ', queryParams);
     fetch('./predictions?' + queryParams, {method: 'GET', cache: 'default'})
       .then(response => response.json())
       .then(data => {
@@ -48,7 +44,19 @@ export default function Home() {
 
   useEffect(() => {
     if (timer) clearTimeout(timer);
-    setTimer(setTimeout(callApi, 500));
+    const prompt = basePrompt < attributes.length ? attributes[basePrompt]['base_prompt'] + ' ' + extraPrompt : extraPrompt;
+    const queryParams = new URLSearchParams({
+      prompt: prompt,
+      scales: scales.join(','),
+      diffusion_steps: 1,
+      seed: seed
+    }).toString();
+    if (queryParams in cache) {
+      console.log('Found in cache:', queryParams);
+      setResultURL(cache[queryParams]);
+    } else {
+      setTimer(setTimeout(callApi, 500, queryParams));
+    }
   }, [basePrompt, extraPrompt, scales, seed]);
 
   return (
