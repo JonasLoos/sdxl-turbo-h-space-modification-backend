@@ -34,7 +34,7 @@ export default function Home() {
       .then(data => {
         if (data.success) {
           console.log('Success:', data);
-          setCache(prev => ({...prev, queryParams: data.result}));
+          setCache(prev => ({...prev, [queryParams]: data.result}));
         } else {
           console.error('Error (from API):', data.error);
           // TODO: maybe display toast with error message
@@ -52,13 +52,13 @@ export default function Home() {
     if (!(queryParams in cache)) {
       setTimer(setTimeout(callApi, 500, queryParams));
     }
-  }, [basePrompt, extraPrompt, scales, seed]);
+  }, [queryParams]);
 
   return (
     <div className="container">
       <h1 className="title">SDXL Turbo H Space Modification</h1>
       <div className="image-container">
-        <img src={cache[queryParams]} className="result-image" />
+        <img src={cache[queryParams] || ''} className="result-image" />
         {activeRequests > 0 && (
           <div className="loading-overlay"><div className='lds-dual-ring'></div></div>
         )}
