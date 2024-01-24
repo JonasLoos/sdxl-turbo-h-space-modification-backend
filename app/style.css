@@ -1,3 +1,11 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    margin: 0;
+}
+
 .container {
     width: 80%;
     margin: auto;
@@ -11,34 +19,84 @@
 }
 
 .image-container {
-    margin: 20px 0;
+    position: relative;
+    margin: 20px auto;
     height: 512px;
+    width: 512px;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
 
 .result-image {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #eee;
+    height: 100%;
+    width: 100%;
+    display: block;
 }
 
 .loading-overlay {
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute; /* Position it over the image */
+    vertical-align: middle;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
-    color: black;
-    font-size: 24px;
-    z-index: 10; /* Ensure it's above the image */
-  }
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+}
 
-.input-container, .sliders {
+.lds-dual-ring {
+    display: inline-block;
+    margin: auto;
+    width: 80px;
+    height: 80px;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #767676c0;
+    border-color: #767676c0 transparent #767676c0 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.prompt-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.prompt-container div {
+    width: 49.5%;
+}
+
+#base-prompt {
+    text-align: right;
+}
+
+#base-prompt, #extra-prompt {
+    display: flex;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    width: 100%;
+}
+
+.prompt-container, .sliders {
     margin-bottom: 15px;
 }
 
@@ -56,4 +114,8 @@
 
 .slider input[type=range] {
     width: 100%;
+}
+
+#description {
+    text-align: left;
 }

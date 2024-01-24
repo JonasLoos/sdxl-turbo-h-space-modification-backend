@@ -1,13 +1,18 @@
 'use client'
 import { useState } from 'react';
 import './style.css';
+import attributes from './attributes.json';
+import Description from './description.mdx';
+
+
+console.log('Attributes:', attributes);
 
 
 export default function Home() {
+  const num_attr = attributes.map((attribute) => attribute['attributes'].length).reduce((a, b) => a + b, 0);
   const [prompt, setPrompt] = useState('');
-  const [value1, setValue1] = useState(0);
-  const [value2, setValue2] = useState(0);
-  const [value3, setValue3] = useState(0);
+  const [basePrompt, setBasePrompt] = useState(0);
+  const [scales, setScales] = useState(Array(num_attr).fill(0));
   const [seed, setSeed] = useState(42);
   const [timer, setTimer] = useState(null);
   const [resultURL, setResultURL] = useState('');
@@ -21,7 +26,7 @@ export default function Home() {
 
   const callApi = () => {
     setActiveRequests(prev => prev + 1);
-    console.log('Calling API with:', { prompt, value1, value2, value3 });
+    console.log('Calling API with:', { prompt, scales, seed });
     fetch('./predictions', {
       method: 'POST',
       headers: {
@@ -29,7 +34,7 @@ export default function Home() {
       },
       body: JSON.stringify({ 
         prompt: prompt,
-        scales: [value1, value2, value3].join(','),
+        scales: scales.join(','),
         diffusion_steps: 1,
         seed: seed,
       }),
@@ -54,25 +59,51 @@ export default function Home() {
     <div className="container">
       <h1 className="title">SDXL Turbo H Space Modification</h1>
       <div className="image-container">
-        <img src={resultURL} alt="Result" className="result-image" />
+        <img src={resultURL} className="result-image" />
         {activeRequests > 0 && (
-          <div className="loading-animation">Loading...</div>
+          <div className="loading-overlay"><div className='lds-dual-ring'></div></div>
         )}
       </div>
-      <div className="input-container">
-        <label htmlFor="prompt">Prompt: </label>
-        <input
-          id="prompt"
-          type="text"
-          value={prompt}
-          onChange={handleInputChange(setPrompt)}
-          className="text-input"
-          placeholder="Enter your prompt"
-        />
+      <div className="prompt-container">
+        <div>
+          <label htmlFor="seed">Base Prompt</label>
+          <select id='base-prompt' value={basePrompt} onChange={handleInputChange(setBasePrompt)}>
+            {attributes.map((attribute, i) => (
+              <option key={i} value={i}>{attribute['base_prompt']}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="prompt">Prompt Continuation</label>
+          <input
+            id="extra-prompt"
+            type="text"
+            value={prompt}
+            onChange={handleInputChange(setPrompt)}
+            className="text-input"
+            placeholder="e.g. cyberpunk style"
+          />
+        </div>
       </div>
       <div className="sliders">
-        <div className="slider">
-          <label htmlFor="value1">Smiling: </label>
+        {attributes[basePrompt].attributes.map(({ attribute, prompt }, i) => {
+          const index = attributes.reduce((a, b, j) => j < basePrompt ? a + b.attributes.length : a, 0) + i;
+          return (
+            <div className="slider" key={attribute} title={prompt}>
+              <label htmlFor={`value-${attribute}`}>{attribute}</label>
+              <input
+                id={`value-${attribute}`}
+                type="range"
+                min="-5"
+                max="5"
+                value={scales[index]}
+                onChange={handleInputChange((x) => {setScales(prev => {prev[index] = x; return [...prev]})})}
+              />
+            </div>
+          )
+        })}
+        {/* <div className="slider">
+          <label htmlFor="value1">Smiling </label>
           <input
             id="value1"
             type="range"
@@ -83,7 +114,7 @@ export default function Home() {
           />
         </div>
         <div className="slider">
-          <label htmlFor="value2">Old: </label>
+          <label htmlFor="value2">Old </label>
           <input
             id="value2"
             type="range"
@@ -94,7 +125,7 @@ export default function Home() {
           />
         </div>
         <div className="slider">
-          <label htmlFor="value3">Cyberpunk: </label>
+          <label htmlFor="value3">Cyberpunk </label>
           <input
             id="value3"
             type="range"
@@ -103,7 +134,10 @@ export default function Home() {
             value={value3}
             onChange={handleInputChange(setValue3)}
           />
-        </div>
+        </div> */}
+      </div>
+      <div id="description">
+        <Description/>
       </div>
     </div>
   );
