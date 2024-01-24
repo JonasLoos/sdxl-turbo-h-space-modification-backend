@@ -3,9 +3,9 @@
 
 ## How this works
 
-The prompt is formed by the *base prompt* and *prompt continuation* from above and then send to a [SDXL-Turbo](https://huggingface.co/stabilityai/sdxl-turbo) model. The h-space of the model, which is in the bottom of the unet, is then adjusted during the image generation process. For this adjustment, a precomputed direction is scaled by the given scales from above and added. The direction is computed by running the model multiple times with a base prompt and an adjusted prompt and then taking the average h-space difference between the two.
+The prompt is formed by the *base prompt* and *prompt continuation* from above and then send to a [SDXL-Turbo](https://huggingface.co/stabilityai/sdxl-turbo) model. The $h$-space of the model, which is in the bottom of the unet, is then adjusted during the image generation process. For this adjustment, a precomputed direction is scaled by the given scales from above and added. The direction is computed by running the model multiple times with a base prompt and an adjusted prompt and then taking the average $h$-space difference between the two.
 
-Here is a simplified excerpt from [model repo](https://github.com/JonasLoos/sdxl-turbo-h-space-modification-model):
+Here is a simplified excerpt from the [model repo](https://github.com/JonasLoos/sdxl-turbo-h-space-modification-model):
 
 ```python
 pipe = AutoPipelineForText2Image.from_pretrained('stabilityai/sdxl-turbo', torch_dtype=torch.float16, variant="fp16").to('cuda')
@@ -21,7 +21,9 @@ def get_representation(text, count=50):
 direction = get_representation("a portrait of a smiling person") - get_representation("a portrait of a person")
 ```
 
-If you want to know more about h-space modification in diffusion models, here are some papers:
+The $h$-space has a dimensionality of $(1,1280,16,16)$ for SDXL-Turbo. The last two dimensions are spatial, so even at the very bottom of the diffusion unet, we still have $16\times16$ blocks. This also impacts the visualization above, as the $h$-space modification is unique for each block. This can cause problems if some parts of e.g. a human face are at a different position in the generated image compared to the precalculated direction.
+
+If you want to know more about $h$-space modification in diffusion models, here are some papers:
 * [Discovering Interpretable Directions in the Semantic Latent Space of Diffusion Models](https://arxiv.org/abs/2303.11073v1) by René Haas et al. [^1] [^2]
 * [Diffusion Models already have a Semantic Latent Space](https://arxiv.org/abs/2210.10960v2) by Mingi Kwon et al.
 
