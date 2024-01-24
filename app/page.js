@@ -26,10 +26,6 @@ export default function Home() {
 
   console.log('cache', cache);
 
-  const handleInputChange = (setter) => (e) => {
-    setter(e.target.value);
-  };
-
   const callApi = (queryParams) => {
     setActiveRequests(prev => prev + 1);
     console.log('Calling API with ', queryParams);
@@ -70,7 +66,7 @@ export default function Home() {
       <div className="prompt-container">
         <div>
           <label htmlFor="seed">Base Prompt</label>
-          <select id='base-prompt' value={basePrompt} onChange={handleInputChange(x => {setBasePrompt(x); setScales(Array(num_attr).fill(0))})}>
+          <select id='base-prompt' value={basePrompt} onChange={e => {setBasePrompt(e.target.value); setScales(Array(num_attr).fill(0))}}>
             {attributes.map((attribute, i) => (
               <option key={i} value={i}>{attribute['base_prompt']}</option>
             ))}
@@ -83,7 +79,7 @@ export default function Home() {
             id="extra-prompt"
             type="text"
             value={extraPrompt}
-            onChange={handleInputChange(setExtraPrompt)}
+            onChange={e => setExtraPrompt(e.target.value)}
             className="text-input"
             placeholder="e.g. photo, colorful"
           />
@@ -99,7 +95,7 @@ export default function Home() {
               min="-8"
               max="8"
               value={scales[i]}
-              onChange={handleInputChange((x) => {setScales(prev => {const tmp = [...prev]; tmp[i] = parseInt(x); return tmp})})}
+              onChange={e => {setScales(prev => {const tmp = [...prev]; tmp[i] = e.target.value; return tmp})}}
             />
           </div>
         ))
