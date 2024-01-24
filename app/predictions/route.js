@@ -17,7 +17,12 @@ export async function GET(request) {
             model_version = model_versions.results[0].id;
         }
         console.log('Calling API with:', input_params);
-        const output = await replicate.run(`${model_owner}/${model_name}:${model_version}`, {input: input_params});
+        const output = await replicate.run(`${model_owner}/${model_name}:${model_version}`, {input: {
+            prompt: input_params.prompt,
+            scales: input_params.scales,
+            diffusion_steps: parseInt(input_params.diffusion_steps),
+            seed: parseInt(input_params.seed),
+        }});
         console.log('Success:', output);
         return new Response(JSON.stringify({success: true, result: output}), {
             headers: {
