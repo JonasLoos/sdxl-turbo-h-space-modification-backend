@@ -71,7 +71,7 @@ export default function Home() {
           <div className="loading-overlay"><div className='lds-dual-ring'></div></div>
         ) : null}
         {Object.keys(cache).length == 0 ? (
-          <div className="loading-cache-empty">The first request might take over a minute if the replicate model is starting.</div>
+          <div className="loading-cache-empty">The first request might take over a minute if the replicate model has to start.</div>
         ) : null}
       </div>
       <div className="prompt-container">
