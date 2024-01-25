@@ -64,7 +64,7 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1 className="title">SDXL Turbo H Space Modification</h1>
+      <h1 className="title">SDXL-Turbo H-Space Modification</h1>
       <div className="image-container">
         <img src={cache[queryParams] || ''} className="result-image" />
         {activeRequests > 0 ? (
