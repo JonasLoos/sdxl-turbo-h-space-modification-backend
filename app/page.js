@@ -4,7 +4,7 @@ import './style.css';
 import attributes from './attributes.json';
 import Description from './description.mdx';
 
-const attributes_list = attributes.map(({base_prompt, attributes}) => attributes.map(({attribute, prompt}) => ({base_prompt, attribute, prompt}))).flat();
+const attributes_list = attributes.map(({base_prompt, attributes}) => attributes.map(({attribute, prompt, works}) => ({base_prompt, attribute, prompt, works}))).flat();
 const num_attr = attributes_list.length;
 
 
@@ -27,7 +27,7 @@ export default function Home() {
   const callApi = (queryParams) => {
     setActiveRequests(prev => prev + 1);
     console.log('Calling API with ', queryParams);
-    fetch('./predictions?' + queryParams, {method: 'GET', cache: 'default'})
+    fetch('./predictions-cerebrium?' + queryParams, {method: 'GET', cache: 'default'})
       .then(response => response.json())
       .then(data => {
         if (data.success) {
@@ -53,7 +53,7 @@ export default function Home() {
     }
   }, [queryParams]);
 
-  // create a delayed first api request, to handle the time replicate might need to start
+  // create a delayed first api request, to handle the time replicate/cerebrium might need to start
   useEffect(() => {
     // only call the api if there is no cached result yet
     const tmp_fn = (x) => {if (Object.keys(cache).length == 0) callApi(x);}
@@ -71,7 +71,7 @@ export default function Home() {
           <div className="loading-overlay"><div className='lds-dual-ring'></div></div>
         ) : null}
         {Object.keys(cache).length == 0 ? (
-          <div className="loading-cache-empty">The first request might take over a minute if the replicate model has to start.</div>
+          <div className="loading-cache-empty">The first request might take quite some time if the model has to spin up.</div>
         ) : null}
       </div>
       <div className="prompt-container">
@@ -97,9 +97,9 @@ export default function Home() {
         </div>
       </div>
       <div className='sliders'>{
-        attributes_list.map(({base_prompt, attribute, prompt}, i) => (
+        attributes_list.map(({base_prompt, attribute, prompt, works}, i) => (
           <div className={`slider ${(basePrompt < attributes.length && base_prompt != attributes[basePrompt].base_prompt) ? 'nodisplay' : ''}`} key={`value-${i}`} title={`"${prompt}" - "${base_prompt}"`}>
-            <label htmlFor={`value-${i}`}>{(basePrompt == attributes.length ? base_prompt + ' - ' : '') + attribute}</label>
+            <label htmlFor={`value-${i}`}>{(basePrompt == attributes.length ? base_prompt + ' - ' : '') + attribute} {(works ? (<i>(usually works)</i>) : (<i>(doesn't usually work)</i>))}</label>
             <input
               id={`value-${i}`}
               type="range"

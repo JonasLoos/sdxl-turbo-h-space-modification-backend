@@ -124,6 +124,10 @@ body {
     width: 100%;
 }
 
+.slider label i {
+    color: gray;
+}
+
 .nodisplay {
     display: none;
 }
